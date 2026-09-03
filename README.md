@@ -5,19 +5,20 @@
 [![MySQL](https://img.shields.io/badge/MySQL_8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Architecture](https://img.shields.io/badge/Architecture-Multi--Tenant_SaaS-00b4d8?style=for-the-badge)]()
-[![Status](https://img.shields.io/badge/Status-Anonymized_Case_Study-blue?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Proprietary_Product-blue?style=for-the-badge)]()
 
 ---
 
-## 🔒 Confidential Production SaaS Project
+## 🔒 Proprietary Personal SaaS Product
 
-> **Project Scope:** Multi-tenant property management SaaS platform designed for landlords, property owners, and real estate management firms — featuring tenant-scoped data isolation, 4-tier property hierarchy modeling, lease agreement lifecycles, automated batch utility and rent invoicing, private document proxy storage, subscription plan limit enforcement, and platform super-admin controls.
+> **Creator & Lead Architect:** Shakhawat Sakib  
+> **Project Scope:** Multi-tenant property management SaaS platform engineered for landlords, property owners, and real estate management agencies — featuring tenant-scoped data isolation, 4-tier property hierarchy modeling, lease agreement lifecycles, automated batch utility and rent invoicing, private document proxy storage, subscription plan limit enforcement, and platform super-admin controls.
 
-This repository documents my engineering work and system architecture on a multi-tenant Real Estate & Property Management SaaS platform.
+This repository documents the **system architecture, data models, and technical engineering decisions** of an independent commercial SaaS platform.
 
-Specific client identifiers, database credentials, production data, and proprietary business configurations have been removed per confidentiality obligations.
+The underlying production source code is maintained as proprietary intellectual property for commercial deployment.
 
-> See [DISCLAIMER.md](./DISCLAIMER.md) for full confidentiality notice.
+> See [DISCLAIMER.md](./DISCLAIMER.md) for full proprietary product notice.
 
 ---
 
@@ -54,7 +55,7 @@ Key Engineering Focus Areas:
 11. [Dynamic Role-Based Access Control (RBAC)](#-11-dynamic-role-based-access-control-rbac)
 12. [Key Engineering Challenges & Solutions](#-12-key-engineering-challenges--solutions)
 13. [Verification & Reliability](#-13-verification--reliability)
-14. [My Role & Contributions](#-14-my-role--contributions)
+14. [Creator Role & Contributions](#-14-creator-role--contributions)
 15. [Tech Stack](#-15-tech-stack)
 
 ---
@@ -315,24 +316,18 @@ Key operational workflows validated during system engineering:
 
 ---
 
-## 👨‍💻 14. My Role & Contributions
+## 👨‍💻 14. Creator Role & Contributions
 
-**Role:** Full-Stack SaaS Software Engineer (PHP / Laravel)
+**Creator & Lead Software Architect:** Shakhawat Sakib
 
-### Architecture & System Design
-- **Designed** the shared-database multi-tenant scoping architecture using Laravel global scopes (`ProjectScope` and `HasProjectScope`).
-- **Designed** the 4-tier relational property model (`Property` → `Building` → `Floor` → `Flat`) with cascading integrity.
-- **Designed** the private document storage proxy architecture for tenant NID and lease agreement protection.
-
-### Core Implementation
-- **Implemented** the batch monthly rent and utility billing engine with dynamic itemization and printable invoice views.
-- **Implemented** the lease agreement lifecycle with automated flat occupancy state synchronization.
-- **Implemented** the `ChecksPlanLimits` trait for subscription tier quota gating.
-- **Implemented** the dual-portal routing and authentication structure for `/user` and `/softAdmin`.
-
-### DevOps & Integrations
-- **Configured** production `Dockerfile` for containerized deployment and `vercel.json` for serverless hosting.
-- **Implemented** bilingual localization (`en` / `bn`) across customer and administrative interfaces.
+### System Architecture & Engineering
+- **Architected and developed** the shared-database multi-tenant scoping layer using Laravel global scopes (`ProjectScope` and `HasProjectScope`).
+- **Designed and implemented** the 4-tier relational property model (`Property` → `Building` → `Floor` → `Flat`) with cascading soft-delete and audit tracking.
+- **Architected and engineered** the secure private document storage proxy (`storage/private/`) protecting tenant NID and lease agreement documents.
+- **Built and implemented** the batch monthly rent and utility billing engine with dynamic itemization and printable invoice views.
+- **Engineered** the lease agreement lifecycle with automated flat occupancy state transitions (`Vacant` ↔ `Occupied`).
+- **Designed and developed** the `ChecksPlanLimits` trait for subscription tier quota gating.
+- **Configured** production `Dockerfile` containerization and `vercel.json` serverless cloud deployment.
 
 ---
 
