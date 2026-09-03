@@ -24,7 +24,7 @@ The underlying production source code is maintained as proprietary intellectual 
 
 ## ⚡ Engineering Snapshot (60-Second Overview)
 
-PropEase is a multi-tenant property management SaaS platform focusing on automated rent collection, relational property modeling, document access isolation, and SaaS tier limit enforcement.
+PropEase is a multi-tenant property management SaaS platform focusing on automated rent billing and payment tracking, relational property modeling, secure document access, and SaaS tier limit enforcement.
 
 ```
 Key Engineering Focus Areas:
@@ -32,7 +32,7 @@ Key Engineering Focus Areas:
 • Subscription plan limit enforcement (ChecksPlanLimits trait) capping entity creation per tier
 • 4-Level relational property hierarchy: Property → Building → Floor → Flat / Unit
 • Automated lease lifecycle state synchronization (Vacant ↔ Occupied flat transitions)
-• Batch monthly rent and utility billing engine with period idempotency checks
+• Batch monthly rent and utility billing engine with period idempotency validation
 • Secure private document storage proxy (storage/private/projects/{id}) preventing cross-tenant access
 • Dual-portal SaaS architecture separating Landlord Workflows (/user) from Platform Admin (/softAdmin)
 • Deployment configuration with containerized Dockerfile and Vercel serverless setup
@@ -167,7 +167,7 @@ graph TB
 | **4-Level Property Hierarchy** | ✅ **Implemented** | `Property` → `Building` → `Floor` → `Flat/Unit` with relational cascading |
 | **Lease Lifecycle & Occupancy Sync**| ✅ **Implemented** | State machine transitioning flat status between `Vacant` and `Occupied` |
 | **Batch Utility & Rent Billing** | ✅ **Implemented** | Automated monthly billing with line items for Rent, Gas, Water, Electricity |
-| **Idempotent Billing Generation** | ✅ **Implemented** | Period validation ensuring no duplicate invoices per lease per billing cycle |
+| **Idempotent Billing Generation** | ✅ **Implemented** | Period validation preventing duplicate invoices per lease per billing cycle |
 | **Private Document Storage Proxy** | ✅ **Implemented** | Non-public file storage with tenant-authenticated streaming download |
 | **Dual-Portal Access Architecture**| ✅ **Implemented** | Separate routing, authentication, and layouts for `/user` and `/softAdmin` |
 | **SaaS Subscription Approvals** | ✅ **Implemented** | Super admin offline/manual payment review and subscription provisioning |
@@ -305,10 +305,10 @@ graph TD
 
 ## 💡 12. Key Engineering Challenges & Solutions
 
-### Challenge 1: Strict Multi-Tenant Data Isolation
-**Problem:** In a shared-database SaaS platform, a query from one landlord must never leak tenant records, rent amounts, or property data to another landlord.
+### Challenge 1: Tenant Data Isolation at the Query Layer
+**Problem:** In a shared-database SaaS platform, queries must not leak tenant records, rent amounts, or property data across landlord boundaries.
 
-**Solution:** Implemented `ProjectScope` and `HasProjectScope` Eloquent global scope traits. Every read, update, and delete query is automatically scoped by the resolved `project_id`, preventing horizontal privilege escalation across tenants.
+**Solution:** Tenant-aware Eloquent models automatically apply the resolved `project_id` scope to standard model queries through `ProjectScope` and `HasProjectScope` traits, with privileged administrative operations handled through explicit scope controls.
 
 ---
 
@@ -336,7 +336,7 @@ graph TD
 ### Challenge 5: Duplicate Billing Prevention & Period Integrity
 **Problem:** If a monthly batch billing process is triggered multiple times for the same month, active leases could receive duplicate invoices.
 
-**Solution:** The batch billing engine validates the target billing period and existing invoice records before dispatching new charges, ensuring each active lease receives at most one invoice per billing cycle.
+**Solution:** The batch billing engine evaluates the target billing period and existing invoice records before dispatching new charges, preventing duplicate invoices during recurring monthly cycles.
 
 ---
 
